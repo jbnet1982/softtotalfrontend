@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -9,18 +10,23 @@ export default function Register({ onRegister }) {
   const [msg, setMsg] = useState('');
 
   const handleRegister = async () => {
-    try {
-      await axios.post('http://localhost:8000/api/register/', {
-        name,
-        email,
-        phone,
-        password,
-      });
+
+
+        await axios.post('http://localhost:8000/api/register/', {
+    
+            email: email,
+            username: name,
+            password: password
+
+        }, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        });
+      
       setMsg('Usuario registrado con éxito');
-      onRegister(); // Callback para navegar a login o chat
-    } catch (err) {
-      setMsg('Error al registrar');
-    }
+       window.location.href = 'http://localhost:3000/Login';
+   
   };
 
   return (
@@ -38,12 +44,6 @@ export default function Register({ onRegister }) {
         placeholder="Correo"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-      /><br />
-      <input
-        type="text"
-        placeholder="Teléfono"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
       /><br />
       <input
         type="password"
